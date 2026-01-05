@@ -62,3 +62,77 @@ button {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* =========================
+   MOBILE RESPONSIVE FIXES
+========================= */
+@media (max-width: 768px) {
+
+  body {
+    height: auto;
+  }
+
+  .hero {
+    height: 100svh;
+    padding: 0 16px;
+  }
+
+  .glow {
+    width: 420px;
+    height: 420px;
+    filter: blur(70px);
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 36px;
+    margin: 16px 0;
+  }
+
+  p {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+
+  input,
+  button {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 9px;
+  }
+}
+
+/* =========================
+   SMALL PHONES
+========================= */
+@media (max-width: 480px) {
+
+  .glow {
+    width: 320px;
+    height: 320px;
+    filter: blur(60px);
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+    padding: 11px;
+  }
+}
+
