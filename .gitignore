@@ -1,0 +1,54 @@
+# ======================
+# Python / Django
+# ======================
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.env.*
+*.log
+
+# ======================
+# Virtual Environments
+# ======================
+env/
+venv/
+.venv/
+
+# ======================
+# Django
+# ======================
+staticfiles/
+media/
+db.sqlite3
+
+# ======================
+# Node / Frontend
+# ======================
+node_modules/
+dist/
+build/
+
+# ======================
+# Terraform
+# ======================
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+
+# ======================
+# Ansible
+# ======================
+*.retry
+inventory.ini
+
+# ======================
+# OS / Editor
+# ======================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+

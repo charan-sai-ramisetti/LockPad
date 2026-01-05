@@ -1,0 +1,7 @@
+- hosts: lockpad
+  become: yes
+
+  roles:
+    - common
+    - backend
+    - caddy

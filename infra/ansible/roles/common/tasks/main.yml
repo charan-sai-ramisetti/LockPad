@@ -1,0 +1,17 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install base packages
+  apt:
+    name:
+      - git
+      - curl
+      - python3
+      - python3-pip
+      - python3-venv
+      - gnupg
+      - apt-transport-https
+      - debian-keyring
+      - debian-archive-keyring
+    state: present

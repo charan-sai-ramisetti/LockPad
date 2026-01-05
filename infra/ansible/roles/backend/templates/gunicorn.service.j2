@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn for LockPad
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory={{ backend_dir }}
+ExecStart={{ app_dir }}/venv/bin/gunicorn LockPad.wsgi:application \
+  --bind 127.0.0.1:8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

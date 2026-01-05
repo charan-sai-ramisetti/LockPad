@@ -1,0 +1,12 @@
+{{ domain_name }} {
+
+    handle /api/* {
+        reverse_proxy localhost:8000
+    }
+
+    handle {
+        reverse_proxy http://{{ frontend_s3_endpoint }} {
+            header_up Host {{ frontend_s3_endpoint }}
+        }
+    }
+}

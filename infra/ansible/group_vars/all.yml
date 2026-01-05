@@ -1,0 +1,7 @@
+app_name: LockPad
+
+app_dir: /home/ubuntu/LockPad
+backend_dir: /home/ubuntu/LockPad/Backend/LockPad
+
+domain_name: "{{ lookup('env', 'DOMAIN_NAME') }}"
+frontend_s3_endpoint: "{{ lookup('env', 'FRONTEND_S3_ENDPOINT') }}"

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LockPad Editor</title>
+  <link rel="stylesheet" href="css/pad.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">LockPad</div>
+  <div class="actions">
+    <button onclick="savePad()">Save</button>
+    <button class="primary" onclick="saveAndExit()">Save & Exit</button>
+    <button class="danger" onclick="closePad()">Close</button>
+  </div>
+</div>
+
+<div class="editor-area">
+  <textarea id="pad" placeholder="Start typing securely..."></textarea>
+</div>
+
+<script src="js/pad.js"></script>
+</body>
+</html>

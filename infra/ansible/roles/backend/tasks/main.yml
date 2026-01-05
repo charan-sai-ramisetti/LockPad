@@ -1,0 +1,31 @@
+- name: Clone application repo
+  git:
+    repo: https://github.com/charan-sai-ramisetti/LockPad.git
+    dest: "{{ app_dir }}"
+    force: yes
+
+- name: Create Python virtual environment
+  command: python3 -m venv {{ app_dir }}/venv
+  args:
+    creates: "{{ app_dir }}/venv"
+
+- name: Install Python requirements
+  pip:
+    requirements: "{{ backend_dir }}/requirements.txt"
+    virtualenv: "{{ app_dir }}/venv"
+
+- name: Create Gunicorn systemd service
+  template:
+    src: gunicorn.service.j2
+    dest: /etc/systemd/system/gunicorn.service
+
+- name: Reload systemd
+  command: systemctl daemon-reexec
+
+- name: Enable and start Gunicorn
+  systemd:
+    name: gunicorn
+    enabled: yes
+    state: restarted
+
+

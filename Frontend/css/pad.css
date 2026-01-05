@@ -1,0 +1,144 @@
+/* =========================
+   RESET & BASE
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: radial-gradient(
+    circle at center,
+    #7c3aed 0%,
+    #4c1d95 35%,
+    #020617 100%
+  );
+  color: #e5e7eb;
+  overflow: hidden;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+.topbar {
+  height: 64px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.actions button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  background: rgba(255, 255, 255, 0.1);
+  color: #f9fafb;
+  font-size: 14px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.actions button:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.actions .primary {
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #020617;
+  font-weight: 600;
+}
+
+.actions .primary:hover {
+  background: linear-gradient(135deg, #60a5fa, #818cf8);
+}
+
+.actions .danger {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fecaca;
+}
+
+.actions .danger:hover {
+  background: rgba(239, 68, 68, 0.35);
+}
+
+/* =========================
+   EDITOR CONTAINER
+========================= */
+.editor-area {
+  height: calc(100vh - 64px);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+
+  padding: 18px 0 24px;
+}
+
+/* =========================
+   EDITOR (TEXTAREA)
+========================= */
+textarea {
+  width: min(92%, 1200px);
+  height: 100%;
+
+  background: #ffffff;
+  color: #020617;
+
+  border: none;
+  border-radius: 20px;
+
+  padding: 40px 48px;
+  font-size: 17px;
+  line-height: 1.75;
+
+  resize: none;
+  outline: none;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+/* Placeholder */
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* =========================
+   SCROLLBAR (SUBTLE)
+========================= */
+textarea::-webkit-scrollbar {
+  width: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
