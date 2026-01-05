@@ -59,8 +59,9 @@ jobs:
     # Upload frontend to S3
     # -----------------------------
     - name: Upload frontend to S3
-      run: |
-        aws s3 sync Frontend/ s3://$FRONTEND_BUCKET --delete
+  run: |
+    aws s3 sync Frontend/ s3://$FRONTEND_BUCKET --delete --region $AWS_DEFAULT_REGION
+
 
     # -----------------------------
     # Setup SSH for Ansible
