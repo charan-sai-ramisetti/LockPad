@@ -1,0 +1,91 @@
+name: Deploy LockPad
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+      DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      LOCKPAD_FERNET_KEY: ${{ secrets.LOCKPAD_FERNET_KEY }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_DB: ${{ secrets.MONGO_DB }}
+
+    steps:
+    # -----------------------------
+    # Checkout code
+    # -----------------------------
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    # -----------------------------
+    # Setup Terraform
+    # -----------------------------
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    # -----------------------------
+    # Terraform Init & Apply
+    # -----------------------------
+    - name: Terraform Init
+      working-directory: infra/terraform
+      run: terraform init
+
+    - name: Terraform Apply
+      working-directory: infra/terraform
+      run: terraform apply -auto-approve
+
+    # -----------------------------
+    # Capture Terraform Outputs
+    # -----------------------------
+    - name: Export Terraform outputs
+      working-directory: infra/terraform
+      run: |
+        echo "EC2_PUBLIC_IP=$(terraform output -raw ec2_public_ip)" >> $GITHUB_ENV
+        echo "ELASTIC_IP=$(terraform output -raw lockpad_elastic_ip)" >> $GITHUB_ENV
+        echo "FRONTEND_BUCKET=$(terraform output -raw frontend_bucket_name)" >> $GITHUB_ENV
+        echo "FRONTEND_S3_ENDPOINT=$(terraform output -raw frontend_bucket_website_endpoint)" >> $GITHUB_ENV
+
+    # -----------------------------
+    # Upload frontend to S3
+    # -----------------------------
+    - name: Upload frontend to S3
+  run: |
+    aws s3 sync Frontend/ s3://$FRONTEND_BUCKET --delete --region $AWS_DEFAULT_REGION
+
+
+    # -----------------------------
+    # Setup SSH for Ansible
+    # -----------------------------
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H $ELASTIC_IP >> ~/.ssh/known_hosts
+
+    # -----------------------------
+    # Run Ansible
+    # -----------------------------
+    - name: Run Ansible
+      working-directory: infra/ansible
+      run: |
+        ansible-playbook playbook.yml \
+          -i inventory/hosts.ini
+
+    # -----------------------------
+    # Final Output
+    # -----------------------------
+    - name: Deployment Success
+      run: |
+        echo "🚀 LockPad deployed successfully!"
+        echo "🌍 Backend URL: https://$DOMAIN_NAME"
