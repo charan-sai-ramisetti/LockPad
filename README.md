@@ -1,4 +1,4 @@
-# LockPad
+
 
 LockPad is a secure note-sharing web application built to demonstrate a complete
 end-to-end DevOps workflow. The project focuses on infrastructure automation,
