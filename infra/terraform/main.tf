@@ -38,7 +38,6 @@ resource "aws_key_pair" "lockpad_key" {
   public_key = file("${path.module}/lockpad-key.pub")
 }
 
-
 resource "aws_instance" "lockpad_ec2" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -70,8 +69,10 @@ resource "aws_s3_bucket_website_configuration" "frontend_site" {
 resource "aws_s3_bucket_public_access_block" "frontend_public" {
   bucket = aws_s3_bucket.frontend.id
 
-  block_public_acls   = false
-  block_public_policy = false
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_policy" "frontend_policy" {
@@ -86,6 +87,10 @@ resource "aws_s3_bucket_policy" "frontend_policy" {
       Resource  = "${aws_s3_bucket.frontend.arn}/*"
     }]
   })
+
+  depends_on = [
+    aws_s3_bucket_public_access_block.frontend_public
+  ]
 }
 
 resource "aws_eip" "lockpad_eip" {
@@ -96,5 +101,3 @@ resource "aws_eip" "lockpad_eip" {
     Name = "lockpad-eip"
   }
 }
-
-
