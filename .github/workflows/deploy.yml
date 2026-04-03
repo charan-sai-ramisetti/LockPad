@@ -59,9 +59,8 @@ jobs:
     # Upload frontend to S3
     # -----------------------------
     - name: Upload frontend to S3
-  run: |
-    aws s3 sync Frontend/ s3://$FRONTEND_BUCKET --delete --region $AWS_DEFAULT_REGION
-
+      run: |
+        aws s3 sync Frontend/ s3://$FRONTEND_BUCKET --delete --region $AWS_DEFAULT_REGION
 
     # -----------------------------
     # Setup SSH for Ansible
@@ -79,8 +78,7 @@ jobs:
     - name: Run Ansible
       working-directory: infra/ansible
       run: |
-        ansible-playbook playbook.yml \
-          -i inventory/hosts.ini
+        ansible-playbook playbook.yml -i inventory/hosts.ini
 
     # -----------------------------
     # Final Output

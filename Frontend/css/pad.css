@@ -142,3 +142,69 @@ textarea::-webkit-scrollbar-thumb {
 textarea::-webkit-scrollbar-track {
   background: transparent;
 }
+/* =========================
+   MOBILE RESPONSIVE FIXES
+========================= */
+@media (max-width: 768px) {
+
+  body {
+    overflow: auto;
+  }
+
+  /* Top bar */
+  .topbar {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  /* Action buttons */
+  .actions {
+    gap: 8px;
+  }
+
+  .actions button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  /* Editor container */
+  .editor-area {
+    height: calc(100vh - 56px);
+    padding: 12px 0 16px;
+  }
+
+  /* Textarea */
+  textarea {
+    width: 94%;
+    padding: 24px 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    border-radius: 16px;
+  }
+}
+
+/* =========================
+   SMALL PHONES (VERY NARROW)
+========================= */
+@media (max-width: 480px) {
+
+  .logo {
+    font-size: 15px;
+  }
+
+  .actions button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  textarea {
+    padding: 20px 16px;
+    font-size: 14px;
+  }
+}
+

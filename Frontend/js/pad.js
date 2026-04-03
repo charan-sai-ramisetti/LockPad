@@ -8,7 +8,7 @@ pad.addEventListener("input", () => {
 });
 
 async function savePad() {
-  await fetch("https://lockpad.charansai.me/api/pad/open/", {
+  await fetch("https://lockpad.charansai.me/api/pad/save/", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -5,6 +5,7 @@ After=network.target
 [Service]
 User=ubuntu
 WorkingDirectory={{ backend_dir }}
+EnvironmentFile=/home/ubuntu/LockPad/.env
 ExecStart={{ app_dir }}/venv/bin/gunicorn LockPad.wsgi:application \
   --bind 127.0.0.1:8000
 Restart=always

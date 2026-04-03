@@ -14,6 +14,19 @@
     requirements: "{{ backend_dir }}/requirements.txt"
     virtualenv: "{{ app_dir }}/venv"
 
+- name: Create Django environment file
+  copy:
+    dest: /home/ubuntu/LockPad/.env
+    owner: ubuntu
+    group: ubuntu
+    mode: '600'
+    content: |
+      DJANGO_SECRET_KEY={{ lookup('env','DJANGO_SECRET_KEY') }}
+      LOCKPAD_FERNET_KEY={{ lookup('env','LOCKPAD_FERNET_KEY') }}
+      MONGO_URI={{ lookup('env','MONGO_URI') }}
+      MONGO_DB={{ lookup('env','MONGO_DB') }}
+
+
 - name: Create Gunicorn systemd service
   template:
     src: gunicorn.service.j2
