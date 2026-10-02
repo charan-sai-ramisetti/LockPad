@@ -55,19 +55,14 @@
       - debian-archive-keyring
     state: present
 
-- name: Install pipx
+- name: Install unzip
   apt:
-    name: pipx
+    name: unzip
     state: present
 
-- name: Install AWS CLI via pipx
-  command: pipx install awscli
+- name: Install AWS CLI via official script
+  shell: |
+    curl -fsSL https://awscli.amazonaws.com/v2/install.sh -o install.sh
+    bash install.sh
   args:
-    creates: /home/ubuntu/.local/bin/aws
-  become: yes
-  become_user: ubuntu
-
-- name: Ensure AWS CLI is in PATH
-  copy:
-    dest: /etc/profile.d/awscli.sh
-    content: 'export PATH=$PATH:/home/ubuntu/.local/bin'
+    creates: /usr/local/bin/aws
