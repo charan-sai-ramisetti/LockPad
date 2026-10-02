@@ -53,4 +53,5 @@
       - apt-transport-https
       - debian-keyring
       - debian-archive-keyring
+      - awscli
     state: present
