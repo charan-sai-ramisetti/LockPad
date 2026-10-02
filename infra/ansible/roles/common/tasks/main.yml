@@ -20,6 +20,9 @@
     components: stable
     signed_by: https://download.docker.com/linux/ubuntu/gpg
     state: present
+
+- name: Force apt cache update
+  apt:
     update_cache: yes
 
 - name: Install Docker and requirements
@@ -31,7 +34,6 @@
       - docker-compose-plugin
       - python3-docker
     state: present
-    update_cache: yes
 
 - name: Ensure Docker service is started and enabled
   service:
