@@ -26,7 +26,13 @@ jobs:
     # -----------------------------
     - name: Checkout repo
       uses: actions/checkout@v4
-
+    # -----------------------------
+    # Verify AWS Identity
+    # -----------------------------
+    - name: Verify AWS credentials
+      run: |
+        echo "Checking AWS credentials..."
+        aws sts get-caller-identity
     # -----------------------------
     # Setup Terraform
     # -----------------------------
