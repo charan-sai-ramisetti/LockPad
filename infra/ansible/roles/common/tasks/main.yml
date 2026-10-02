@@ -53,5 +53,10 @@
       - apt-transport-https
       - debian-keyring
       - debian-archive-keyring
-      - awscli
     state: present
+
+- name: Install AWS CLI via pip
+  pip:
+    name: awscli
+    state: present
+    executable: pip3
