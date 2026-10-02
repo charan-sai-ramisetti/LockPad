@@ -16,10 +16,11 @@
     name: docker
     types: deb
     uris: https://download.docker.com/linux/ubuntu
-    suites: focal
+    suites: "{{ ansible_distribution_release }}"
     components: stable
     signed_by: https://download.docker.com/linux/ubuntu/gpg
     state: present
+    update_cache: yes
 
 - name: Install Docker and requirements
   apt:
@@ -30,6 +31,7 @@
       - docker-compose-plugin
       - python3-docker
     state: present
+    update_cache: yes
 
 - name: Ensure Docker service is started and enabled
   service:
