@@ -6,7 +6,7 @@ provider "aws" {
 # S3 Bucket for Terraform State
 # ---------------------------
 resource "aws_s3_bucket" "tf_state" {
-  bucket = "lockpad-terraform-state-bucket"
+  bucket = "lockpad-terraform-state-bucket-211299"
 
   tags = {
     Name        = "lockpad-tf-state"
@@ -48,7 +48,7 @@ resource "aws_s3_bucket_public_access_block" "block_public" {
 # DynamoDB Table for Locking
 # ---------------------------
 resource "aws_dynamodb_table" "tf_lock" {
-  name         = "lockpad-terraform-lock"
+  name         = "lockpad-terraform-lock-211299"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
