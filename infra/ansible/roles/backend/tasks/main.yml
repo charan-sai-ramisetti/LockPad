@@ -23,7 +23,7 @@
     dest: "{{ app_dir }}/docker-compose.yml"
 
 - name: Login to ECR
-  shell: aws ecr get-login-password --region {{ lookup('env','AWS_REGION') }} | docker login --username AWS --password-stdin {{ lookup('env','ECR_REGISTRY') }}
+  shell: /home/ubuntu/.local/bin/aws ecr get-login-password --region {{ lookup('env','AWS_REGION') }} | docker login --username AWS --password-stdin {{ lookup('env','ECR_REGISTRY') }}
 
 - name: Start docker containers
   community.docker.docker_compose_v2:

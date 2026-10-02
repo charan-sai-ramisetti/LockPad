@@ -63,7 +63,7 @@
 - name: Install AWS CLI via pipx
   command: pipx install awscli
   args:
-    creates: /root/.local/bin/aws
+    creates: /home/ubuntu/.local/bin/aws
   become: yes
   become_user: ubuntu
 
