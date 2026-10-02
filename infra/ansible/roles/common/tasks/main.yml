@@ -2,6 +2,41 @@
   apt:
     update_cache: yes
 
+- name: Install requirements for Docker
+  apt:
+    name:
+      - curl
+      - gnupg
+      - lsb-release
+      - ca-certificates
+    state: present
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Install Docker and requirements
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+      - python3-docker
+    state: present
+
+- name: Ensure Docker service is started and enabled
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
 - name: Install base packages
   apt:
     name:

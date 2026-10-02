@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ${ECR_REGISTRY}/lockpad-backend:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/lockpad_db
+      - MONGO_DB=lockpad_db
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DEBUG=false
+    depends_on:
+      - mongodb
+    networks:
+      - lockpad-net
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - lockpad-net
+
+networks:
+  lockpad-net:
+    driver: bridge
+
+volumes:
+  mongodb_data:

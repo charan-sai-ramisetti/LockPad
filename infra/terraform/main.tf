@@ -44,6 +44,11 @@ resource "aws_instance" "lockpad_ec2" {
   key_name               = aws_key_pair.lockpad_key.key_name
   vpc_security_group_ids = [aws_security_group.lockpad_sg.id]
 
+  root_block_device {
+    volume_size = 50
+    volume_type = "gp3"
+  }
+
   tags = {
     Name = "lockpad-backend"
   }

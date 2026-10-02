@@ -42,7 +42,7 @@ jobs:
 
     - name: Terraform Apply
       working-directory: infra/terraform
-      run: terraform destroy -auto-approve
+      run: terraform apply -auto-approve
 
     # -----------------------------
     # Capture Terraform Outputs
@@ -63,6 +63,30 @@ jobs:
         aws s3 sync Frontend/ s3://$FRONTEND_BUCKET --delete --region $AWS_DEFAULT_REGION
 
     # -----------------------------
+    # Build and Push Docker Image
+    # -----------------------------
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: lockpad-backend
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./Backend/LockPad
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+    # -----------------------------
     # Setup SSH for Ansible
     # -----------------------------
     - name: Setup SSH
@@ -73,12 +97,25 @@ jobs:
         ssh-keyscan -H $ELASTIC_IP >> ~/.ssh/known_hosts
 
     # -----------------------------
+    # Update Ansible Inventory
+    # -----------------------------
+    - name: Update Ansible Inventory
+      run: |
+        echo "[lockpad]" > infra/ansible/inventory/hosts.ini
+        echo "$ELASTIC_IP ansible_user=ubuntu" >> infra/ansible/inventory/hosts.ini
+
+    # -----------------------------
     # Run Ansible
     # -----------------------------
     - name: Run Ansible
       working-directory: infra/ansible
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        LOCKPAD_FERNET_KEY: ${{ secrets.LOCKPAD_FERNET_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
       run: |
-        ansible-playbook playbook.yml -i inventory/hosts.ini
+        ansible-playbook playbook.yml -i inventory/hosts.ini -e "ECR_REGISTRY=$ECR_REGISTRY"
 
     # -----------------------------
     # Final Output

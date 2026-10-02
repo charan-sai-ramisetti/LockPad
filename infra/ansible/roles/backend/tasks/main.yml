@@ -1,44 +1,34 @@
+- name: Create directory for app
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+
 - name: Clone application repo
   git:
     repo: https://github.com/charan-sai-ramisetti/LockPad.git
     dest: "{{ app_dir }}"
     force: yes
 
-- name: Create Python virtual environment
-  command: python3 -m venv {{ app_dir }}/venv
-  args:
-    creates: "{{ app_dir }}/venv"
-
-- name: Install Python requirements
-  pip:
-    requirements: "{{ backend_dir }}/requirements.txt"
-    virtualenv: "{{ app_dir }}/venv"
-
-- name: Create Django environment file
+- name: Create .env file for docker-compose
   copy:
-    dest: /home/ubuntu/LockPad/.env
-    owner: ubuntu
-    group: ubuntu
-    mode: '600'
+    dest: "{{ app_dir }}/.env"
     content: |
+      ECR_REGISTRY={{ lookup('env','ECR_REGISTRY') }}
       DJANGO_SECRET_KEY={{ lookup('env','DJANGO_SECRET_KEY') }}
       LOCKPAD_FERNET_KEY={{ lookup('env','LOCKPAD_FERNET_KEY') }}
-      MONGO_URI={{ lookup('env','MONGO_URI') }}
-      MONGO_DB={{ lookup('env','MONGO_DB') }}
 
+- name: Copy docker-compose.yml
+  copy:
+    src: ../../../../docker-compose.yml
+    dest: "{{ app_dir }}/docker-compose.yml"
 
-- name: Create Gunicorn systemd service
-  template:
-    src: gunicorn.service.j2
-    dest: /etc/systemd/system/gunicorn.service
+- name: Login to ECR
+  shell: aws ecr get-login-password --region {{ lookup('env','AWS_REGION') }} | docker login --username AWS --password-stdin {{ lookup('env','ECR_REGISTRY') }}
 
-- name: Reload systemd
-  command: systemctl daemon-reexec
-
-- name: Enable and start Gunicorn
-  systemd:
-    name: gunicorn
-    enabled: yes
-    state: restarted
+- name: Start docker containers
+  docker_compose:
+    project_src: "{{ app_dir }}"
+    state: present
+    pull: yes
 
 
