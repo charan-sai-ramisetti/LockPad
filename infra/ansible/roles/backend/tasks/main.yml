@@ -26,9 +26,9 @@
   shell: aws ecr get-login-password --region {{ lookup('env','AWS_REGION') }} | docker login --username AWS --password-stdin {{ lookup('env','ECR_REGISTRY') }}
 
 - name: Start docker containers
-  docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ app_dir }}"
     state: present
-    pull: yes
+    pull: always
 
 

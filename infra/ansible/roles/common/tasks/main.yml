@@ -12,13 +12,13 @@
     state: present
 
 - name: Add Docker GPG apt Key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-
-- name: Add Docker Repository
-  apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu focal stable
+  deb822_repository:
+    name: docker
+    types: deb
+    uris: https://download.docker.com/linux/ubuntu
+    suites: focal
+    components: stable
+    signed_by: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
 - name: Install Docker and requirements
